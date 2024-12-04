@@ -3,19 +3,18 @@ with open("input", 'r') as f:
     lines = {}
     ln = 1
     for line in f.readlines():
-        line = "." + line + "."
         lines[ln] = line
         ln += 1
 guetige_zahlen = []
-for i in range(1, 101):
+for i in range(1, ln):
     if i-1 >= 1:
-        last_line = lines[i-1].strip()
+        last_line = ".." + lines[i-1].strip() + ".."
     else:
-        last_line = 140*"."
-    cur_line = lines[i].strip()
-    if i-1 <= 100:
-        next_line = lines[i+1].strip()
-    else:
+        last_line = 144*"."
+    cur_line = ".." + lines[i].strip() + ".."
+    try:
+        next_line = ".." + lines[i+1].strip() + ".."
+    except:
         next_line = 142*"."
     print(last_line)
     print(cur_line)
@@ -44,7 +43,10 @@ for i in range(1, 101):
         if cur_line[zahl[1]] != ".":
             werten = True
 
-        for i in range(zahl[0]-1, zahl[1]):
+        for i in range(zahl[0]-2, zahl[1]+1):
+            # print(zahl[0], zahl[1])
+            # print(cur_line[zahl[1]])
+            # print(next_line[i])
             if last_line[i] is not ".":
                 if last_line[i].isdigit() is False:
                     werten = True
@@ -56,9 +58,10 @@ for i in range(1, 101):
             for i in range(zahl[0]-1, zahl[1]):
                 zahl_wert.append(cur_line[i])
             guetige_zahlen.append(int("".join(zahl_wert)))
+            print("".join(zahl_wert))
             zahl_wert = []
-    print(guetige_zahlen)
-    input()
+    # print(guetige_zahlen)
+    # input()
 print(guetige_zahlen)
 sum = 0
 for i in guetige_zahlen:
