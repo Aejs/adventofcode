@@ -15,38 +15,46 @@ with open("input", "r") as f:
             pos = pos + 1
         line_num = line_num + 1
 
-    # print(line_laenge)
-
 line_num = 0
 x33 = []
-for i in lines:
+for input_line in range(0, len(lines), 1):
     pos = 0
-    temp = {}
-    for num in range(0, 3, 1):
-        temp[num] = {}
-        for pos in range(0, line_laenge, 1):
-            for pos_next in range(0, 3, 1):
-                # print(lines[i+num])
-                if i+num > len(lines)-1:
+    while pos < line_laenge:  # Changed this to iterate through all positions
+        temp = {}
+        for num in range(0, 3, 1):
+            temp[num] = {}
+            for new_pos in range(0, 3, 1):
+                if num + input_line > len(lines) - 1:
                     break
-                if pos+pos_next > line_laenge-1:
+                if pos + new_pos > line_laenge - 1:
                     break
-                # print(num, pos_next)
-                temp[num][pos_next] = lines[i+num][pos+pos_next]
-    x33.append(temp)
-
+                temp[num][new_pos] = lines[input_line + num][pos + new_pos]
+        if (
+            len(temp) == 3
+            and len(temp[0]) == 3
+            and len(temp[1]) == 3
+            and len(temp[2]) == 3
+        ):
+            x33.append(temp)
+        pos += 1  # Move one position at a time
 
 def checksmax(d):
-    print(d)
-    if len(d) < 3:
+    if d[1][1] != "A":
         return False
-    if d[1][1] == "A":
-        print("check A")
-        if (d[0][0] == "S" and d[2][2] == "M") or (d[0][0] == "M" and d[2][2] == "S"):
-            print("CHeck 1")
-            if (d[2][0] == "S" and d[2][2] == "M") or (d[0][2] == "M" and d[2][2] == "S"):
-                print("treffer")
 
+    # Check both diagonals for MAS or SAM
+    left_diagonal = (d[0][0] == "M" and d[2][2] == "S") or (
+        d[0][0] == "S" and d[2][2] == "M"
+    )
+    right_diagonal = (d[0][2] == "M" and d[2][0] == "S") or (
+        d[0][2] == "S" and d[2][0] == "M"
+    )
 
+    return left_diagonal and right_diagonal
+
+count = 0
 for i in x33:
-    checksmax(i)
+    if checksmax(i):
+        count += 1
+
+print(f"Total X-MAS patterns found: {count}")
